@@ -1,0 +1,25 @@
+{
+  "name": "powernap.js",
+  "version": "1.0.0",
+  "description": "Super simple REST framework for node.js",
+  "main": "Endpoint.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shortercode/PowerNap.js.git"
+  },
+  "keywords": [
+    "REST",
+    "RESTful",
+    "node.js",
+    "JavaScript"
+  ],
+  "author": "Iain Shorter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shortercode/PowerNap.js/issues"
+  },
+  "homepage": "https://github.com/shortercode/PowerNap.js#readme"
+}

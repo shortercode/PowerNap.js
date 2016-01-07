@@ -1,10 +1,10 @@
 'use strict';
 
-var mime = require('./mime.js').mime,
-	endpoint = require('./endpoint.js').endpoint,
+var mime = require('./mime.js'),
+	Endpoint = require('./Endpoint.js'),
 	fs = require('fs');
 	
-class staticEndpoint extends endpoint {
+class StaticEndpoint extends Endpoint {
 	
 	constructor (rgx, root) {
 		super("get", rgx, function (request, res) {
@@ -13,14 +13,14 @@ class staticEndpoint extends endpoint {
 				if (this.index) {
 					this.generateIndex(root, request.path, res);
 				} else {
-					staticEndpoint.generateError(res, 404);
+					StaticEndpoint.generateError(res, 404);
 				}
 			} else {
 				// attempt to serve file
-				res.setHeader("Content-Type", mime[request.ext || "default"]);
+				res.setHeader("Content-Type", mime(request.ext));
 				var stream = fs.createReadStream(root + request.path);
 				stream.on('error', function () {
-					staticEndpoint.generateError(res, 404);
+					StaticEndpoint.generateError(res, 404);
 				});
 				stream.on('open', function () {
 					res.statusCode = 200;
@@ -32,10 +32,10 @@ class staticEndpoint extends endpoint {
 	}
 	
 	generateIndex (root, path, res) {
-		res.setHeader("Content-Type", mime["html"]);
+		res.setHeader("Content-Type", mime("html"));
 		fs.readdir(root + path, function (err, files) {
 			if (err) {
-				staticEndpoint.generateError(res, 404);
+				StaticEndpoint.generateError(res, 404);
 			} else {
 				res.statusCode = 200;
 				var i = 0,
@@ -65,4 +65,4 @@ class staticEndpoint extends endpoint {
 	
 }
 
-exports.staticEndpoint = staticEndpoint;
+module.exports = StaticEndpoint;

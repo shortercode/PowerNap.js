@@ -1,6 +1,6 @@
 'use strict';
 
-class endpoint {
+class Endpoint {
 	
 	constructor (method, rgx, callback) {
 		this.method = method.toUpperCase();
@@ -16,7 +16,7 @@ class endpoint {
 		try {
 			this.callback(request, res);
 		} catch (e) {
-			endpoint.generateError(res, 500);
+			Endpoint.generateError(res, 500);
 		}
 	}
 		
@@ -27,4 +27,4 @@ class endpoint {
 	
 }
 
-exports.endpoint = endpoint;
+module.exports = Endpoint;
