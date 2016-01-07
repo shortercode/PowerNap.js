@@ -2,7 +2,7 @@
   "name": "powernap.js",
   "version": "1.1.1",
   "description": "Super simple REST framework for node.js",
-  "main": "Endpoint.js",
+  "main": "PowerNap.js",
   "scripts": {
     "test": "node test.js"
   },
