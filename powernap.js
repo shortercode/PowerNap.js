@@ -40,7 +40,7 @@ class PowerNap {
 	}
 	
 	static parseRequest (req) {
-		var url = req.url, method = req.method, i, query, path, filename, ext, body;
+		var url = decodeURI(req.url), method = req.method, i, query, path, filename, ext, body;
 		// remove anchor tag
 		i = url.indexOf("#");
 		path = ~i ? url.slice(0, i) : url;
