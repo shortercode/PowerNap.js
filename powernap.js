@@ -69,25 +69,22 @@ class PowerNap {
 		};
 	}
 	
-	static getBody (req) {
+	static getBody (req, sizeLimit) {
 		return new Promise(function (res, rej) {
 			var body = '';
+			sizeLimit = sizeLimit || 1e6; // default limit is ~ 1MB
 			req.on('data', function (data) {
-				console.log("Body data");
 				body += data;
-				// 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-				if (body.length > 1e6) { 
-					// FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
+				if (body.length > sizeLimit) { // bad request, bail! 
 					req.connection.destroy();
-					rej("Body exceeded length");
+					body = null;
+					rej("Body exceeded size limit");
 				}
 			});
 			req.on('end', function () {
-				console.log("Body complete");
 				res(body);
 			});
 			req.on('error', function (err) {
-				console.log("Body error", err);
 				rej(err);
 			});
 		});
