@@ -4,8 +4,14 @@ class Endpoint {
 	
 	constructor (method, rgx, callback) {
 		this.method = method.toUpperCase();
-		this.rgx = new RegExp(rgx);
 		this.callback = callback;
+		if (typeof rgx === 'string') { // presumes a path
+			this.rgx = new RegExp("^" + rgx); // "^" to check if the string is at the start of the request
+		} else if (rgx instanceOf RegExp){ // any other regex match
+			this.rgx = rgx;
+		} else {
+			throw TypeError("Endpoints must be either a RegExp or String");
+		}
 	}
 	
 	match (request) {

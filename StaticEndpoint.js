@@ -6,19 +6,20 @@ var mime = require('./mime.js'),
 	
 class StaticEndpoint extends Endpoint {
 	
-	constructor (rgx, root) {
-		super("get", rgx, function (request, res) {
+	constructor (str, root) {
+		super("get", str, function (request, res) {
+			var localPath = request.path.slice(str.length); // remove the url match segment so "/public/myfile.js" can become "./www/myfile.js"
 			if (request.ext === "") {
 				// serve index
 				if (this.index) {
-					this.generateIndex(root, request.path, res);
+					this.generateIndex(root, localPath, res);
 				} else {
 					StaticEndpoint.generateError(res, 404);
 				}
 			} else {
 				// attempt to serve file
 				res.setHeader("Content-Type", mime(request.ext));
-				var stream = fs.createReadStream(root + request.path);
+				var stream = fs.createReadStream(root + localPath);
 				stream.on('error', function () {
 					StaticEndpoint.generateError(res, 404);
 				});
@@ -52,7 +53,7 @@ class StaticEndpoint extends Endpoint {
 					];
 				for (; i < l; i++) {
 					if (files[i][0] !== ".") {
-						output.push("<li><a href=\"" + path + files[i] + "\">" + files[i] + "</a></li>");
+						output.push("<li><a href=\"" + files[i] + "\">" + files[i] + "</a></li>");
 					}
 				}
 				output.push("</ul>")
