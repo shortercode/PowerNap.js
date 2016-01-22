@@ -10,19 +10,21 @@ class PowerNap {
 		const endpoints = this.endpoints = [];
 		http.createServer(
 			function (req, res) {
-				console.time("[PARSE REQUEST]");
+				console.log("[PROCESSING REQUEST] " + request.method + " " + request.path);
+				console.time("[REQUEST EXECUTION TIME]" + request.path);
 				const request = PowerNap.parseRequest(req);
-				console.timeEnd("[PARSE REQUEST]");
-				//console.log("[REQUEST]", JSON.stringify(request, null, 2));
 				// find the first matching endpoint and execute
 				for (var i = 0, l = endpoints.length; i < l; i++) {
 					if (endpoints[i].match(request)) { 
+						console.log("[MATCHED ENDPOINT] " + endpoint.rgx);
 						endpoints[i].run(request, res);
+						console.timeEnd("[REQUEST EXECUTION TIME]" + request.path);
 						return;
 					}
 				}
 				// failed to find an endpoint
 				Endpoint.generateError(res, 500);
+				console.timeEnd("[REQUEST EXECUTION TIME]" + request.path);
 			}
 		).listen(port);
 	}
@@ -30,13 +32,13 @@ class PowerNap {
 	endpoint (method, rgx, callback) {
 		var route = new Endpoint(method, rgx, callback);
 		this.endpoints.push(route);
-		return this;
+		return route;
 	}
 	
 	staticEndpoint (rgx, root) {
 		var route = new StaticEndpoint(rgx, root);
 		this.endpoints.push(route);
-		return this;
+		return route;
 	}
 	
 	static parseRequest (req) {
