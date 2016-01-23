@@ -12,7 +12,7 @@ class StaticEndpoint extends Endpoint {
 			if (request.ext === "") {
 				// serve index
 				if (this.index) {
-					this.generateIndex(root, localPath, res);
+					this.generateIndex(str, root + localPath, res);
 				} else {
 					StaticEndpoint.generateError(res, 404);
 				}
@@ -34,7 +34,7 @@ class StaticEndpoint extends Endpoint {
 	
 	generateIndex (root, path, res) {
 		res.setHeader("Content-Type", mime("html"));
-		fs.readdir(root + path, function (err, files) {
+		fs.readdir(path, function (err, files) {
 			if (err) {
 				StaticEndpoint.generateError(res, 404);
 			} else {
@@ -53,7 +53,7 @@ class StaticEndpoint extends Endpoint {
 					];
 				for (; i < l; i++) {
 					if (files[i][0] !== ".") {
-						output.push("<li><a href=\"./" + files[i] + "\">" + files[i] + "</a></li>");
+						output.push("<li><a href=\"" + root + files[i] + "\">" + files[i] + "</a></li>");
 					}
 				}
 				output.push("</ul>")

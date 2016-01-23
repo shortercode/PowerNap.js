@@ -4,4 +4,4 @@ app.endpoint("get", "/Tests", function (req, res) {
 	res.end("You smell");
 });
 
-app.staticEndpoint("/", ".");
+app.staticEndpoint("/Public", "./FolderA/");
