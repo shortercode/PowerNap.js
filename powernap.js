@@ -16,7 +16,7 @@ class PowerNap {
 				// find the first matching endpoint and execute
 				for (var i = 0, l = endpoints.length; i < l; i++) {
 					if (endpoints[i].match(request)) { 
-						console.log("[MATCHED ENDPOINT] " + endpoint.rgx);
+						console.log("[MATCHED ENDPOINT] " + endpoints[i].rgx);
 						endpoints[i].run(request, res);
 						console.timeEnd("[REQUEST EXECUTION TIME]" + request.path);
 						return;
