@@ -53,7 +53,7 @@ class StaticEndpoint extends Endpoint {
 					];
 				for (; i < l; i++) {
 					if (files[i][0] !== ".") {
-						output.push("<li><a href=\"" + files[i] + "\">" + files[i] + "</a></li>");
+						output.push("<li><a href=\"./" + files[i] + "\">" + files[i] + "</a></li>");
 					}
 				}
 				output.push("</ul>")
