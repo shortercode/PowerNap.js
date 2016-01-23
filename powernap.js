@@ -10,9 +10,9 @@ class PowerNap {
 		const endpoints = this.endpoints = [];
 		http.createServer(
 			function (req, res) {
-				console.log("[PROCESSING REQUEST] " + request.method + " " + request.path);
-				console.time("[REQUEST EXECUTION TIME]" + request.path);
 				const request = PowerNap.parseRequest(req);
+                console.log("[PROCESSING REQUEST] " + request.method + " " + request.path);
+				console.time("[REQUEST EXECUTION TIME]" + request.path);
 				// find the first matching endpoint and execute
 				for (var i = 0, l = endpoints.length; i < l; i++) {
 					if (endpoints[i].match(request)) { 
