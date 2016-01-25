@@ -11,20 +11,15 @@ class PowerNap {
 		http.createServer(
 			function (req, res) {
 				const request = PowerNap.parseRequest(req);
-                console.log("[PROCESSING REQUEST] " + request.method + " " + request.path);
-				console.time("[REQUEST EXECUTION TIME]" + request.path);
 				// find the first matching endpoint and execute
 				for (var i = 0, l = endpoints.length; i < l; i++) {
 					if (endpoints[i].match(request)) { 
-						console.log("[MATCHED ENDPOINT] " + endpoints[i].rgx);
 						endpoints[i].run(request, res);
-						console.timeEnd("[REQUEST EXECUTION TIME]" + request.path);
 						return;
 					}
 				}
 				// failed to find an endpoint
-				Endpoint.generateError(res, 500);
-				console.timeEnd("[REQUEST EXECUTION TIME]" + request.path);
+				Endpoint.generateError(res, 500, "Failed to match endpoint, no matching RegExp");
 			}
 		).listen(port);
 	}
@@ -56,8 +51,6 @@ class PowerNap {
 		// extract file extension
 		i = filename.lastIndexOf(".");
 		ext = ~i ? filename.slice(i + 1) : "";
-		// get request body
-		//body = PowerNap.getBody (req);
 		// return results
 		return {
 			query: query,
@@ -65,7 +58,8 @@ class PowerNap {
 			ext: ext,
 			filename: filename,
 			method: method,
-			request: req
+			request: req,
+			parameters: {}
 		};
 	}
 	
