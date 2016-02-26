@@ -19,7 +19,8 @@ class PowerNap {
 					}
 				}
 				// failed to find an endpoint
-				Endpoint.generateError(res, 500, "Failed to match endpoint, no matching RegExp");
+                request.request = null;
+				Endpoint.generateError(res, 500, "Failed to match endpoint, no matching RegExp\n", JSON.stringify(request, null, 4));
 			}
 		).listen(port);
 	}
@@ -37,7 +38,7 @@ class PowerNap {
 	}
 	
 	static parseRequest (req) {
-		var url = decodeURI(req.url), method = req.method, i, query, path, filename, ext, body;
+		var url = decodeURI(req.url), method = req.method, i, query, path, filename, ext;
 		// remove anchor tag
 		i = url.indexOf("#");
 		path = ~i ? url.slice(0, i) : url;
