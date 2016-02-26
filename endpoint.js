@@ -39,7 +39,7 @@ class Endpoint {
 		try {
 			this.callback(request, res);
 		} catch (e) {
-			Endpoint.generateError(res, 500, "Failed to run command, syntax error in callback");
+			Endpoint.generateError(res, 500, "Failed to run command, syntax error in callback", e.stack || e);
 		}
 	}
 	
@@ -51,9 +51,10 @@ class Endpoint {
 		}
 	}
 		
-	static generateError (res, code, statement) {
+	static generateError (res, code, statement, request) {
 		res.statusCode = code;
 		res.end(code + " " + statement);
+        console.log(statement, request);
 	}
 	
 }
