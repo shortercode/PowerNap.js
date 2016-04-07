@@ -1,4 +1,5 @@
 'use strict';
+const chalk = require('chalk');
 
 class Endpoint {
 	
@@ -15,12 +16,12 @@ class Endpoint {
 						arr[i] = "";
 					}
 				});
-				this.rgx = new RegExp("^" + rgx.replace(/\/\:\w+/g, '\/([^\/]*)')); 
+				this.rgx = new RegExp("^" + rgx.replace(/\/\:\w+/g, '\/([^\/]*)'));
 				// "^" to check if the string is at the start of the url
 				// replacer allows the regex to part match any string where an optional parameter has been specified with a ":"
 			} else {
 				this.rgx = new RegExp("^" + rgx);
-				this.parameters = []; 
+				this.parameters = [];
 			}
 		} else if (rgx instanceof RegExp){ // any other regex match
 			this.rgx = rgx;
@@ -44,17 +45,35 @@ class Endpoint {
 	}
 	
 	getParameters (request) {
-		for (var i = 0, parts = request.path.slice(1).split("/"), l = this.parameters.length; i < l; i++) {
-			if (this.parameters[i]) {
-				request.parameters[this.parameters[i]] = parts[i];
+		const parts = request.path.slice(1).split("/");
+		const l = this.parameters.length;
+		let i = 0;
+		let parameterName;
+		for (; i < l; i++) {
+			parameterName = this.parameters[i];
+			if (parameterName) {
+				request.parameters[parameterName] = parts[i];
 			}
 		}
+	}
+	
+	static generateLog (res, req) {
+		const DATE = new Date().toLocaleString('en-GB');
+		const TIME = process.hrtime(request.time);
+		const CODE = res.statusCode;
+		const COLOR = chalk[
+			CODE > 500 ? 'bgRed' :
+			CODE > 400 ? 'bgYellow' :
+			CODE > 200 ? 'bgGreen' :
+			'dim' // for whatever reason the request has completed with an odd status code
+		];
+		console.log(`${DATE} | ${COLOR(CODE)} | ${TIME[0] + TIME[1] / 1e9} | ${req.method} ${req.path}`);
 	}
 		
 	static generateError (res, code, statement, request) {
 		res.statusCode = code;
 		res.end(code + " " + statement);
-        console.log(statement, request);
+		request.error = statement;
 	}
 	
 }
